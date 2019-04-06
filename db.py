@@ -10,7 +10,12 @@ client = MongoClient("mongodb://{}:{}@localhost/tasks_db".format(db_username, db
 tasks_db = client["tasks_db"]
 tasks = tasks_db["tasks"]
 
-def test():
+def getAll():
     getAll_cursor = tasks.find({}, {"name" : 1, "_id" : 0})
     print(list(getAll_cursor))
-    return "Test works!"
+    return list(getAll_cursor)
+
+def getById(id):
+    getById_cursor = tasks.find({"_id" : id}, {"name" : 1, "_id" : 0})
+    print(list(getById_cursor))
+    return list(getById)
