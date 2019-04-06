@@ -1,7 +1,9 @@
 import pymongo
+import json
 
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from flask import jsonify
 
 db_username = "devs"
 db_password = "devs"
@@ -16,4 +18,4 @@ def getAll():
 
 def getById(id):
     getById_cursor = tasks.find({"_id" : ObjectId(id)})
-    return list(elem["name"] for elem in getById_cursor)
+    return jsonify(list(elem["name"] for elem in getById_cursor))
