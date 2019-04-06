@@ -4,12 +4,13 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 
-client = MongoClient('vvtsoft.ddns.net', 5120)
+db_username = "devs"
+db_password = "devs"
 
-db = client['db']
+client = MongoClient("mongodb://{}:{}@localhost/tasks_db".format(db_username, db_password))
+tasks_db = client["tasks_db"]
+tasks = tasks_db["tasks"]
 
-tasks = db.tasks
-
-getAll_cursor = tasks.find( {}, {'name' : 1, '_id' : 0} )
+getAll_cursor = tasks.find({}, {"name" : 1, "_id" : 0})
 
 list(getAll_cursor)
