@@ -1,11 +1,16 @@
+import pymongo
+
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 db_username = "devs"
 db_password = "devs"
 
 client = MongoClient("mongodb://{}:{}@localhost/tasks_db".format(db_username, db_password))
-tasks_db = client["tasks_db"] # This is the database
-tasks = tasks_db["tasks"] # This is a collection (table) in the database
+tasks_db = client["tasks_db"]
+tasks = tasks_db["tasks"]
 
 def test():
+    getAll_cursor = tasks.find({}, {"name" : 1, "_id" : 0})
+    print(list(getAll_cursor))
     return "Test works!"
