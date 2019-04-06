@@ -11,11 +11,9 @@ tasks_db = client["tasks_db"]
 tasks = tasks_db["tasks"]
 
 def getAll():
-    getAll_cursor = tasks.find({}, {"name" : 1, "_id" : 0})
-    print(list(getAll_cursor))
-    return list(getAll_cursor)
+    getAll_cursor = tasks.find({})
+    return list([elem["name"] for elem in getAll_cursor])
 
 def getById(id):
-    getById_cursor = tasks.find({"_id" : id}, {"name" : 1, "_id" : 0})
-    print(list(getById_cursor))
-    return list(getById)
+    getById_cursor = tasks.find({"_id" : id})
+    return list(elem["name"] for elem in getById_cursor)
