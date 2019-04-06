@@ -19,8 +19,10 @@ tasks_db = client["tasks_db"]
 tasks = tasks_db["tasks"]
 
 def getAll():
-    getAll_cursor = tasks.find({})
-    return JSONEncoder().encode(list([elem for elem in getAll_cursor]))
+    getAllList = list(tasks.find({}))
+    for task in tasks_list:
+        task["_id"] = str(task["_id"])
+    return getAllList
 
 def getById(id):
     getById_cursor = tasks.find({"_id" : ObjectId(id)})
