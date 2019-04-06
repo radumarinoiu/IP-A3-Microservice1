@@ -7,7 +7,7 @@ def root():
     return db.getAll()
 
 @app.route("/<id>")
-def root_id():
+def root_id(id):
     return db.getById(id)
 
 if __name__ == "__main__":
