@@ -15,6 +15,5 @@ def getAll():
     return list([elem["name"] for elem in getAll_cursor])
 
 def getById(id):
-    getById_cursor = tasks.find({"_id" : id})
-    print(list(elem["name"] for elem in getById_cursor))
+    getById_cursor = tasks.find({"_id" : ObjectId(id)})
     return list(elem["name"] for elem in getById_cursor)
