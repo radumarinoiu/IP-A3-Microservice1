@@ -13,4 +13,4 @@ tasks = tasks_db["tasks"]
 
 getAll_cursor = tasks.find({}, {"name" : 1, "_id" : 0})
 
-print(getAll_cursor)
+print(list(getAll_cursor))
