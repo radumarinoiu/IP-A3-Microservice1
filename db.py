@@ -20,7 +20,7 @@ tasks = tasks_db["tasks"]
 
 def getAll():
     getAllList = list(tasks.find({}))
-    for task in tasks_list:
+    for task in getAllList:
         task["_id"] = str(task["_id"])
     return getAllList
 
