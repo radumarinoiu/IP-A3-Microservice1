@@ -24,4 +24,4 @@ def getAll():
 
 def getById(id):
     getById_cursor = tasks.find({"_id" : ObjectId(id)})
-    return jsonify(list(elem["name"] for elem in getById_cursor))
+    return JSONEncoder(list(elem for elem in getById_cursor))
