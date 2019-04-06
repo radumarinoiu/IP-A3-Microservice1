@@ -20,7 +20,7 @@ tasks = tasks_db["tasks"]
 
 def getAll():
     getAll_cursor = tasks.find({})
-    return JSONEncoder().encode(list([elem["name"] for elem in getAll_cursor]))
+    return JSONEncoder().encode(list([elem for elem in getAll_cursor]))
 
 def getById(id):
     getById_cursor = tasks.find({"_id" : ObjectId(id)})
