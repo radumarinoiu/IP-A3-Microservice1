@@ -22,7 +22,7 @@ def getAll():
     getAllList = list(tasks.find({}))
     for task in getAllList:
         task["_id"] = str(task["_id"])
-    return getAllList
+    return jsonify(getAllList)
 
 def getById(id):
     getById_cursor = tasks.find({"_id" : ObjectId(id)})
