@@ -12,4 +12,4 @@ tasks = db.tasks
 
 getAll_cursor = tasks.find( {}, {'name' : 1, '_id' : 0} )
 
-list(task_cursor)
+list(getAll_cursor)
