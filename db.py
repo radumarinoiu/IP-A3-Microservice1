@@ -5,6 +5,12 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 from flask import jsonify
 
+class JSONEncoder(json.JSONEncoder):
+    def default(self, o):
+        if isinstance(o, ObjectId):
+            return str(o)
+        return json.JSONEncoder.default(self, o)
+
 db_username = "devs"
 db_password = "devs"
 
@@ -14,7 +20,7 @@ tasks = tasks_db["tasks"]
 
 def getAll():
     getAll_cursor = tasks.find({})
-    return jsonify(list([elem for elem in getAll_cursor]))
+    return JSONEncoder().encode(list([elem["name"] for elem in getAll_cursor]))
 
 def getById(id):
     getById_cursor = tasks.find({"_id" : ObjectId(id)})
