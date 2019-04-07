@@ -25,6 +25,6 @@ def getAll():
     return jsonify(getAllList)
 
 def getById(id):
-    getByIdElem = tasks.find({"_id" : ObjectId(id)})
+    getByIdElem = tasks.find_one({"_id" : ObjectId(id)})
     getByIdElem["_id"] = str(getByIdElem["_id"])
     return jsonify(getByIdElem)
