@@ -1,6 +1,7 @@
 from flask import Flask
 import post
 import requests
+import put
 
 
 app = Flask(__name__)
@@ -11,4 +12,4 @@ def add_task():
 
 @app.route('/', methods = ['POST'])
 def modify_task():
-	return put.put_task(request.form['id'], request.form['new_task'])
+	return put.put_task(request.get_json())
