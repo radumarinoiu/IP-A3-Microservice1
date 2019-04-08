@@ -5,12 +5,6 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 from flask import jsonify
 
-class JSONEncoder(json.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, ObjectId):
-            return str(o)
-        return json.JSONEncoder.default(self, o)
-
 db_username = "devs"
 db_password = "devs"
 
@@ -28,3 +22,13 @@ def getById(id):
     getByIdElem = tasks.find_one({"_id" : ObjectId(id)})
     getByIdElem["_id"] = str(getByIdElem["_id"])
     return jsonify(getByIdElem)
+def post_task(task)
+
+	post = {'nume': task["nume"], 'creare': task["creare"], 'expirare': task["expirare"]}
+	posts = tasks
+	post_id = posts.insert_one(post).inserted_id
+	return post_id
+
+def put_task(task)
+	tasks.update_one({'creare': task['creare']}, {'nume': task['nume'], 'expirare': task['expirare']}, upsert = False)
+	
