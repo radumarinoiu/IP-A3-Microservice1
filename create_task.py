@@ -11,3 +11,8 @@ def post_task(task)
 	post = {'nume': task["nume"], 'creare': task["creare"], 'expirare': task["expirare"]}
 	posts = db.tasks
 	post_id = posts.insert_one(post).inserted_id
+	return post_id
+
+def put_task(task)
+	tasks.update_one({'creare': task['creare']}, {'nume': task['nume'], 'expirare': task['expirare']}, upsert = False)
+	
