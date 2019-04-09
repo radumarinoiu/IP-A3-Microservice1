@@ -36,5 +36,5 @@ def put_task(task):
             '$set' : { "nume": task["nume"], "expirare": task["expirare"], "creare": task["creare"] }
         }
     )
-    return str(task['_id'])
+    return str(task['nume'])
 	
