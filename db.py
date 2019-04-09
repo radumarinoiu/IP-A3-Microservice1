@@ -33,6 +33,6 @@ def put_task(task):
     tasks.update(
         {'_id': task['_id']},
         { "$set": { 'nume': task['nume'], 'creare': task['creare'], 'expirare': task['expirare'] } },
-	    upsert = True
+	    upsert = False
     )
     return str(task['_id'])
