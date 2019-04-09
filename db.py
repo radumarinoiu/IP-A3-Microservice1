@@ -30,7 +30,7 @@ def post_task(task):
 	return str(post_id)
 
 def put_task(task):
-    tasks.update(
+    tasks.update_one(
         {'_id': task['_id']}, 
         { 
             '$set' : { "nume": task["nume"], "expirare": task["expirare"], "creare": task["creare"] }
