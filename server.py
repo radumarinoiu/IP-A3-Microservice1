@@ -5,7 +5,7 @@ import db
 app = Flask(__name__)
 
 @app.route("/")
-def root():
+def get_all_tasks():
     return db.getAll()
 
 @app.route("/", methods = ["POST"])
@@ -13,8 +13,8 @@ def add_task():
     return db.post_task(request.get_json())
 
 @app.route("/<id>")
-def root_id(id):
-    return db.getById(id)
+def get_task_by_id(task_id):
+    return db.getById(task_id)
 
 @app.route("/", methods = ["PUT"])
 def update_task():
