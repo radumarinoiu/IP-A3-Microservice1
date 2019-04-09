@@ -22,7 +22,7 @@ def getById(id):
     getByIdElem = tasks.find_one({"_id" : ObjectId(id)})
     getByIdElem["_id"] = str(getByIdElem["_id"])
     return jsonify(getByIdElem)
-    
+
 def post_task(task):
 	post = {'nume': task["nume"], 'creare': task["creare"], 'expirare': task["expirare"]}
 	posts = tasks
@@ -31,10 +31,8 @@ def post_task(task):
 
 def put_task(task):
     tasks.update(
-        {'_id': str(task['_id'])}, 
-        { 
-            '$set' : { 'nume': task['nume'], 'creare': task['creare'], 'expirare': task['expirare'] }
-        }
+        {'_id': task['_id']},
+        { 'nume': task['nume'], 'creare': task['creare'], 'expirare': task['expirare'] },
+	upsert = True
     )
     return str(task['_id'])
-	
