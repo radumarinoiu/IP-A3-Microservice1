@@ -25,14 +25,13 @@ def getById(id):
 
 def post_task(task):
 	post = {'nume': task["nume"], 'creare': task["creare"], 'expirare': task["expirare"]}
-	posts = tasks
-	post_id = posts.insert_one(post).inserted_id
+	post_id = tasks.insert(post).inserted_id
 	return str(post_id)
 
 def put_task(task):
     tasks.update(
         {'_id': task['_id']},
         { 'nume': task['nume'], 'creare': task['creare'], 'expirare': task['expirare'] },
-	upsert = True
+	    upsert = True
     )
     return str(task['_id'])
