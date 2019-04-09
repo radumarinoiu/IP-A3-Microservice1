@@ -9,7 +9,7 @@ def root():
     return db.getAll()
 @app.route("/", methods = ["POST"])
 def add_task():
-	return create_task.post_task(request.get_json())
+	return db.post_task(request.get_json())
 
 @app.route("/<id>")
 def root_id(id):
@@ -17,7 +17,7 @@ def root_id(id):
 
 @app.route("/", methods = ["PUT"])
 def update_task():
-	return create_task.put_task(request.get_json())
+	return db.put_task(request.get_json())
 
 
 
