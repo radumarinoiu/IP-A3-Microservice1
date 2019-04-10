@@ -23,16 +23,16 @@ def getById(id):
     getByIdElem["_id"] = str(getByIdElem["_id"])
     return jsonify(getByIdElem)
 
-def post_task(task):
-    post = {'nume': task["nume"], 'creare': task["creare"], 'expirare': task["expirare"]}
+def post_task(assignement):
+    post = {'id_user': assignement["id_user"], 'id_task': assignement["id_task"]}
     post_id = coll.insert_one(post).inserted_id
     return str(post_id)
 
 
-def put_task(task):
+def put_task(assignement):
     coll.update(
-        { '_id': ObjectId(task['_id']) },
-        { "$set": { 'nume': task['nume'], 'creare': task['creare'], 'expirare': task['expirare'] } },
+        { '_id': ObjectId(assignement['_id']) },
+        { "$set": { 'id_user': assignement['id_user'], 'id_task': assignement['id_task'] } },
         upsert = False
     )
     return str(task['_id'])
