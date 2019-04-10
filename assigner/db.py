@@ -9,7 +9,7 @@ db_username = "devs"
 db_password = "devs"
 
 client = MongoClient("mongodb://{}:{}@localhost/assigner_db".format(db_username, db_password))
-db = client["assigner_db"]
+db = client["tasks_db"]
 coll = db["assigner"]
 
 def getAll():
