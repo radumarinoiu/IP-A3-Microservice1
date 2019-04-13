@@ -16,11 +16,15 @@ def add_task():
 def get_task_by_id(task_id):
     return db.getById(task_id)
 
-@app.route("/", methods = ["PUT"])
-def update_task():
-    return db.put_task(request.get_json())
+@app.route("/<id>", methods = ["DELETE"])
+def delete_task(task_id):
+    return db.deleteById(task_id)
+
+# @app.route("/", methods = ["PUT"])
+# def update_task():
+#     return db.put_task(request.get_json())
 
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5123)
+    app.run(host="0.0.0.0", port=5121)

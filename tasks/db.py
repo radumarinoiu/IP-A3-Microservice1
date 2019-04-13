@@ -36,3 +36,6 @@ def put_task(task):
         upsert = False
     )
     return str(task['_id'])
+
+# def delete_task(id):
+
