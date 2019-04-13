@@ -16,13 +16,13 @@ def add_task():
 def get_task_by_id(task_id):
     return db.getById(task_id)
 
-@app.route("/<id>", methods = ["DELETE"])
-def delete_task(task_id):
-    return db.deleteById(task_id)
+# @app.route("/<id>", methods = ["DELETE"])
+# def delete_task(task_id):
+#     return db.deleteById(task_id)
 
-# @app.route("/", methods = ["PUT"])
-# def update_task():
-#     return db.put_task(request.get_json())
+@app.route("/", methods = ["PUT"])
+def update_task():
+    return db.put_task(request.get_json())
 
 
 
