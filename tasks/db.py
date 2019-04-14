@@ -4,6 +4,7 @@ import json
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from flask import jsonify
+from flask_api import status
 
 db_username = "devs"
 db_password = "devs"
@@ -41,5 +42,5 @@ def deleteById(id):
     deletedId = coll.find_one({"_id" : ObjectId(id)})
     deletedId["_id"] = str(deletedId["_id"])
     coll.remove({"_id" : ObjectId(id)})
-    return jsonify(deletedId)
+    return status.HTTP_200_OK
 
