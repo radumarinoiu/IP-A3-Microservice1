@@ -12,7 +12,7 @@ def get_all_tasks():
 def add_task():
     return db.post_task(request.get_json())
 
-@app.route("/<id>")
+@app.route("/<task_id>")
 def get_task_by_id(task_id):
     return db.getById(task_id)
 
