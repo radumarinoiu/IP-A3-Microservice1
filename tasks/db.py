@@ -44,5 +44,5 @@ def deleteById(id):
     deletedId["_id"] = str(deletedId["_id"])
     coll.remove({"_id" : ObjectId(id)})
     result = {'a' : 'b'}
-    return make_response(jsonify(result), 200, mimetype = 'application/json')
+    return make_response(jsonify(result), 200)
 
