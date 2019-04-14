@@ -42,5 +42,5 @@ def deleteById(id):
     deletedId = coll.find_one({"_id" : ObjectId(id)})
     deletedId["_id"] = str(deletedId["_id"])
     coll.remove({"_id" : ObjectId(id)})
-    return Response("{'a':'b'}", status=201, mimetype='application/json')
+    return Response("{'a':'b'}", status=200, mimetype='application/json')
 
