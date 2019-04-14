@@ -5,6 +5,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 from flask import jsonify
 from flask import Response
+from flask import make_response
 
 db_username = "devs"
 db_password = "devs"
@@ -42,5 +43,6 @@ def deleteById(id):
     deletedId = coll.find_one({"_id" : ObjectId(id)})
     deletedId["_id"] = str(deletedId["_id"])
     coll.remove({"_id" : ObjectId(id)})
-    return Response("{'a':'b'}", status=200, mimetype='application/json')
+    result = {'a' : 'b'}
+    return make_response(jsonify(result), 200, mimetype = 'application/json')
 
