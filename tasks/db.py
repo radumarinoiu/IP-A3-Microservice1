@@ -22,8 +22,11 @@ def getAll():
 
 def getById(id):
     getByIdElem = coll.find_one({"_id" : ObjectId(id)})
-    getByIdElem["_id"] = str(getByIdElem["_id"])
-    return jsonify(getByIdElem)
+    if not getByIdElem:
+        return make_response(jsonify(""), 404)
+    else:
+        getByIdElem["_id"] = str(getByIdElem["_id"])
+        return jsonify(getByIdElem)
 
 def post_task(task):
     post = {'nume': task["nume"], 'creare': task["creare"], 'expirare': task["expirare"]}
