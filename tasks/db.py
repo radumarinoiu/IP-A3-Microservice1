@@ -43,6 +43,6 @@ def deleteById(id):
     deletedId = coll.find_one({"_id" : ObjectId(id)})
     deletedId["_id"] = str(deletedId["_id"])
     coll.remove({"_id" : ObjectId(id)})
-    result = {'a' : 'b'}
-    return make_response(jsonify(result), 200)
+    # result = {'a' : 'b'}
+    return make_response(jsonify(""), 200)
 
