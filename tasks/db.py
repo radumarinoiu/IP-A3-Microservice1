@@ -32,6 +32,11 @@ def check_deadline(deadline):
     if deadline["date"] is "null" or deadline["time"] is "null":
         return False
     return True
+
+def check_status(task):
+    if task["status"] == "done":
+        return True
+    return False
     
 
 
