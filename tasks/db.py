@@ -118,13 +118,30 @@ def post_task(task):
             return "commit change is not set"
         if commit["date"] is "null":
             return "commit date is not set"
-    
-    post = {'nume': task["nume"], 'creare': task["creare"], 'expirare': task["expirare"]}
+    for sub_task in task["sub-task"]:
+        post = json.load(sub_task)
+        post_id = coll.insert_one(post).inserted_id
+    post = json.load(task)
     post_id = coll.insert_one(post).inserted_id
     return str(post_id) + " was posted"
 
 
 def put_task(task):
+    if task["_id"] is "null":
+        return "no id was sent"
+    change = True
+    if task["status"] == "done":
+        for sub_task in task["sub-task"]:
+            if check_status is False:
+                change = False
+                break
+    if change == True:
+        coll.update(
+            { '_id': ObjectId(task['_id']) },
+            { "$set": { 'status': 'done' } },
+            upsert = False
+        )
+    
     coll.update(
         { '_id': ObjectId(task['_id']) },
         { "$set": { 'nume': task['nume'], 'creare': task['creare'], 'expirare': task['expirare'] } },
