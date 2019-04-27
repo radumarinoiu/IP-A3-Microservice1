@@ -28,12 +28,12 @@ def get_task(task_id):
 
 @app.route("/tasks", methods = ["POST"])
 def add_task():
-    resp = requests.post(TASKS_MS_ADDRESS_PORT, request.json)
+    resp = requests.post(TASKS_MS_ADDRESS_PORT, json=request.json)
     return resp.raw.read(), resp.status_code, resp.headers.items()
 
 @app.route("/tasks/<task_id>", methods = ["PUT"])
 def update_task(task_id):
-    resp = requests.put(TASKS_MS_ADDRESS_PORT + "/" + task_id, request.json)
+    resp = requests.put(TASKS_MS_ADDRESS_PORT + "/" + task_id, json=request.json)
     return resp.raw.read(), resp.status_code, resp.headers.items()
 
 @app.route("/tasks/<task_id>", methods = ["DELETE"])
@@ -57,12 +57,12 @@ def get_assignment(assignment_id):
 @app.route("/assigner", methods = ["POST"])
 def add_assignment():
     print(request.json)
-    resp = requests.post(ASSIGNER_MS_ADDRESS_PORT, request.json)
+    resp = requests.post(ASSIGNER_MS_ADDRESS_PORT, json=request.json)
     return resp.raw.read(), resp.status_code, resp.headers.items()
 
 @app.route("/assigner/<assignment_id>", methods = ["PUT"])
 def update_assignment(assignment_id):
-    resp = requests.put(ASSIGNER_MS_ADDRESS_PORT + "/" + assignment_id, request.json)
+    resp = requests.put(ASSIGNER_MS_ADDRESS_PORT + "/" + assignment_id, json=request.json)
     return resp.raw.read(), resp.status_code, resp.headers.items()
 
 @app.route("/assigner/<assignment_id>", methods = ["DELETE"])
