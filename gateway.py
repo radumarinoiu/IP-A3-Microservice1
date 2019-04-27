@@ -56,6 +56,7 @@ def get_assignment(assignment_id):
 
 @app.route("/assigner", methods = ["POST"])
 def add_assignment():
+    print(request.json)
     resp = requests.post(ASSIGNER_MS_ADDRESS_PORT, request.json)
     return resp.raw.read(), resp.status_code, resp.headers.items()
 
