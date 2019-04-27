@@ -18,7 +18,8 @@ app = Flask(__name__)
 
 @app.route("/tasks", methods = ["GET"])
 def get_all_tasks():
-    return requests.get(TASKS_MS_ADDRESS_PORT)
+    resp = requests.get(TASKS_MS_ADDRESS_PORT, stream=True)
+    return resp.raw.read(), resp.status_code, resp.headers.items()
 
 @app.route("/tasks/<task_id>", methods = ["GET"])
 def get_task(task_id):
