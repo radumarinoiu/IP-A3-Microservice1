@@ -46,27 +46,27 @@ def delete_task(task_id):
 
 @app.route("/assigner", methods = ["GET"])
 def get_all_assignments():
-    resp = requests.get(TASKS_MS_ADDRESS_PORT)
+    resp = requests.get(ASSIGNER_MS_ADDRESS_PORT)
     return resp.raw.read(), resp.status_code, resp.headers.items()
 
 @app.route("/assigner/<assignment_id>", methods = ["GET"])
 def get_assignment(assignment_id):
-    resp = requests.get(TASKS_MS_ADDRESS_PORT + "/" + assignment_id)
+    resp = requests.get(ASSIGNER_MS_ADDRESS_PORT + "/" + assignment_id)
     return resp.raw.read(), resp.status_code, resp.headers.items()
 
 @app.route("/assigner", methods = ["POST"])
 def add_assignment():
-    resp = requests.post(TASKS_MS_ADDRESS_PORT, request.json)
+    resp = requests.post(ASSIGNER_MS_ADDRESS_PORT, request.json)
     return resp.raw.read(), resp.status_code, resp.headers.items()
 
 @app.route("/assigner/<assignment_id>", methods = ["PUT"])
 def update_assignment(assignment_id):
-    resp = requests.put(TASKS_MS_ADDRESS_PORT + "/" + assignment_id, request.json)
+    resp = requests.put(ASSIGNER_MS_ADDRESS_PORT + "/" + assignment_id, request.json)
     return resp.raw.read(), resp.status_code, resp.headers.items()
 
 @app.route("/assigner/<assignment_id>", methods = ["DELETE"])
 def delete_assignment(task_id):
-    resp = requests.delete(TASKS_MS_ADDRESS_PORT + "/" + task_id)
+    resp = requests.delete(ASSIGNER_MS_ADDRESS_PORT + "/" + task_id)
     return resp.raw.read(), resp.status_code, resp.headers.items()
 
 
