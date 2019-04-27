@@ -5,8 +5,8 @@ import requests
 
 # Constants
 
-TASKS_MS_ADDRESS_PORT = "localhost:5121"
-ASSIGNER_MS_ADDRESS_PORT = "localhost:5122"
+TASKS_MS_ADDRESS_PORT = "http://localhost:5121"
+ASSIGNER_MS_ADDRESS_PORT = "http://localhost:5122"
 
 
 # Initialization
