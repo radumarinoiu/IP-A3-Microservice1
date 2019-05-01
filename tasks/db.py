@@ -28,102 +28,62 @@ def getById(id):
         getByIdElem["_id"] = str(getByIdElem["_id"])
         return jsonify(getByIdElem)
 
-def check_deadline(deadline):
-    if deadline["date"] is "null" or deadline["time"] is "null":
-        return False
-    return True
 
 def check_status(task):
     if task["status"] == "done":
         return True
     return False
-    
 
 
-def check_participants(participant):
-    if participant["id"] is "null":
-        return "participant has not id set"
-    if participant["name"] is "null":
-        return "participant name has not been set"
-    if participant["thumbnail"] is "null":
-        return "participant thumbnail is not set"
-    if participant["role"] is "null":
-        return "participant role is not set"
+def check_task_fields(task):
+    task_fields = ["name", "category", "department", "creator", "description", "priority", "status", "deadline", "timestamp"]
+    task_field_lists = {
+        "participants": ["_id"],
+        "sub-tasks": ["name", "description", "deadline", "status", "priority"],
+        # "dependencies": ["task-id", "deadline", "status", "priority"],
+        # "reverse-dependecies": ["task-id", "deadline", "status", "priority"],
+        "dependencies": ["_id"],
+        "reverse-dependecies": ["_id"],
+        "commits": ["commit_url", "username", "changes", "timestamp"]
+    }
+
+    for field in task_fields:
+        if field not in task:
+            return 400
+
+    for task_field in task_field_lists:
+        if task_field in task:
+            for task_field_field in task_field_lists[task_field]:
+                if task_field_field not in task[task_field]:
+                    return 400
 
 
 def post_task(task):
-    if task["id"] is "null":
-        return "asd"
-    if task["name"] is "null":
-        return "name not found"
-    if task["category"] is "null":
-        return "category not found"
-    if task["department"] is "null":
-        return "department not found"
-    if check_deadline(task["deadline"]) is False:
-        return "deadline is not set"
-    if task["creator"] is "null":
-        return "deadline not found"
-    if task["description"] is "null":
-        return "description is not set"
-    if task["priority"] is "null":
-        return "priority is not set"
-    if task["status"] is "null":
-        return "status is not set"
-    for part in task["participants"]:
-        if check_participants(part) is False:
-            return "participant is not set"
-    for sub_task in task["sub-tasks"]:
-        if sub_task["subtask-id"] is "null":
-            return "subtask id is not set"
-        if sub_task["deadline"] is False:
-            return "subtask deadline is not set"
-        if sub_task["status"] is "null":
-            return "subtask status is not set"
-        if sub_task["priority"] is "null":
-            return "subtask priority is not set"
-        for part in sub_task["participants"]:
-            if check_participants(part) is False:
-                return "subtask participant is not set"
-    for dependecy in task["dependencies"]:
-        if sub_task["task-id"] is "null":
-            return "subtask id is not set"
-        if sub_task["deadline"] is False:
-            return "subtask deadline is not set"
-        if sub_task["status"] is "null":
-            return "subtask status is not set"
-        if sub_task["priority"] is "null":
-            return "subtask priority is not set"
-        for part in sub_task["participants"]:
-            if check_participants(part) is False:
-                return "subtask participant is not set"
-    for reverse_dependecy in task["reverse-dependecies"]:
-        if reverse_dependecy["task-id"] is "null":
-            return "subtask id is not set"
-        if reverse_dependecy["deadline"] is False:
-            return "subtask deadline is not set"
-        if reverse_dependecy["status"] is "null":
-            return "subtask status is not set"
-        if reverse_dependecy["priority"] is "null":
-            return "subtask priority is not set"
-        for part in reverse_dependecy["participants"]:
-            if check_participants(part) is False:
-                return "subtask participant is not set"
-    for commit in task["commits"]:
-        if commit["userId"] is "null":
-            return "commit user id is not set"
-        if commit["username"] is "null":
-            return "commit username is not set"
-        if commit["changes"] is "null":
-            return "commit change is not set"
-        if commit["date"] is "null":
-            return "commit date is not set"
-    for sub_task in task["sub-task"]:
-        post = json.load(sub_task)
-        post_id = coll.insert_one(post).inserted_id
-    post = json.load(task)
-    post_id = coll.insert_one(post).inserted_id
-    return str(post_id) + " was posted"
+    task_fields = ["name", "category", "department", "creator", 
+    "description", "priority", "status", "deadline", "timestamp"]
+    task_field_lists = {
+        "participants": ["_id"],
+        "sub-tasks": ["name", "description", "deadline", "status", "priority"],
+        # "dependencies": ["task-id", "deadline", "status", "priority"],
+        # "reverse-dependecies": ["task-id", "deadline", "status", "priority"],
+        "dependencies": ["_id"],
+        "reverse-dependecies": ["_id"],
+        "commits": ["commit_url", "username", "changes", "timestamp"]
+    }
+
+    for field in task_fields:
+        if field not in task:
+            return {"error": "Field {} is required but not present.".format(field)}, 400
+
+    for task_field in task_field_lists:
+        if task_field in task:
+            for task_field_field in task_field_lists[task_field]:
+                if task_field_field not in task[task_field]:
+                    return {"error": "Field {} from {} is required but not present.".format(
+                        task_field_field, task_field)}, 400
+
+    post_id = coll.insert_one(task).inserted_id
+    return {"_id": str(post_id)}, 200
 
 
 def put_task(task):

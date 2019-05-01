@@ -5,7 +5,7 @@ import db
 
 app = Flask(__name__)
 
-@app.route("/")
+@app.route("/", methods = ["GET"])
 def get_all_tasks():
     return db.getAll()
 
@@ -13,7 +13,7 @@ def get_all_tasks():
 def add_task():
     return db.post_task(request.get_json())
 
-@app.route("/<task_id>")
+@app.route("/<task_id>", methods = ["GET"])
 def get_task_by_id(task_id):
     return db.getById(task_id)
 
