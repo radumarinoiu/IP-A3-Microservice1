@@ -14,6 +14,10 @@ db = client["microservice1"]
 coll = db["tasks"]
 
 
+with open("task_schema.json", "rb") as f:
+    task_schema = json.load(f)
+
+
 def getAll():
     tasks_list = list(coll.find({}))
     for task in tasks_list:
@@ -78,9 +82,9 @@ def deleteById(id):
 
 
 def check_task_fields(task):
-    task_fields = ["name", "category", "department", "creator", 
+    task_single_fields = ["name", "category", "department", "creator", 
     "description", "priority", "status", "deadline", "timestamp"]
-    task_field_lists = {
+    task_list_fields = {
         "participants": ["_id"],
         "sub-tasks": ["name", "description", "deadline", "status", "priority"],
         # "dependencies": ["task-id", "deadline", "status", "priority"],
@@ -90,24 +94,34 @@ def check_task_fields(task):
         "commits": ["commit_url", "username", "changes", "timestamp"]
     }
 
-    for field in task_fields:
-        if field not in task:
-            return {"error": "Field {} is required but not present.".format(field)}, False
+    ret_obj, ret_val = check_custom_fields(task, task_single_fields)
+    if not ret_val:
+        return {"error": "Field {} is required but not present.".format(ret_obj)}, False
 
-    for field in list(field for field in task):
-        if field not in task_fields and field not in task_field_lists:
-            del task[field]
-
-
-    for task_field_child in task_field_lists:
-        if task_field_child in task:
-            for task_field_child_field in task_field_lists[task_field_child]:
-                if task_field_child_field not in task[task_field_child]:
-                    return {"error": "Field {} from {} is required but not present.".format(
-                        task_field_child_field, task_field_child)}, False
-
-            for task_field_field in list(field for field in task[task_field_child]):
-                if task_field_field not in task_field_lists[task_field_child]:
-                    del task[task_field_field]
+    for task_list_field in task_list_fields:
+        if task_list_field in task:
+            ret_obj[task_list_field] = []
+            for task_list_field_entity in task[task_list_field]:
+                ret_obj_child, ret_val = check_custom_fields(task_list_field_entity, task_list_fields[task_list_field])
+                if not ret_val:
+                    return {"error": "Field {} of one of the children of {} is required but not present.".format(ret_obj_child, task_list_field)}, False
+                ret_obj[task_list_field].append(ret_obj_child)
 
     return {}, True
+
+
+def check_custom_fields(obj, fields, ret_obj = {}):
+    for field in fields:
+        if field not in obj:
+           return field, False
+    for field in obj:
+        if field in fields:
+            ret_obj[field] = obj[field]
+    return ret_obj, True
+
+def check_object(obj, schema):
+    try:
+        validate(instance=obj, schema=schema)
+        return True
+    except:
+        return False
