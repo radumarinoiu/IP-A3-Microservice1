@@ -44,7 +44,7 @@ def post_task(task):
     
     # Check task's fields
     if not check_object(task, task_schema):
-        return jsonify({"error": "Invalid task format."}}), 400
+        return jsonify({"error": "Invalid task format."}), 400
 
     post_id = coll.insert_one(task).inserted_id
     task["_id"] = str(post_id)
