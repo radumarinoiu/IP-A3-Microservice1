@@ -4,7 +4,6 @@
   "$id": "http://example.com/root.json",
   "type": "object",
   "title": "Task Object JSON Schema",
-  "additionalProperties": false,
   "required": [
     "name",
     "category",
@@ -16,6 +15,7 @@
     "deadline",
     "timestamp"
   ],
+  "additionalProperties": false,
   "properties": {
     "name": {
       "$id": "#/properties/name",
@@ -118,6 +118,7 @@
         "required": [
           "_id"
         ],
+        "additionalProperties": false,
         "properties": {
           "_id": {
             "$id": "#/properties/participants/items/properties/_id",
@@ -147,6 +148,7 @@
           "status",
           "priority"
         ],
+        "additionalProperties": false,
         "properties": {
           "name": {
             "$id": "#/properties/sub-tasks/items/properties/name",
@@ -212,6 +214,7 @@
         "required": [
           "_id"
         ],
+        "additionalProperties": false,
         "properties": {
           "_id": {
             "$id": "#/properties/dependencies/items/properties/_id",
@@ -237,6 +240,7 @@
         "required": [
           "_id"
         ],
+        "additionalProperties": false,
         "properties": {
           "_id": {
             "$id": "#/properties/reverse-dependecies/items/properties/_id",
@@ -265,6 +269,7 @@
           "changes",
           "timestamp"
         ],
+        "additionalProperties": false,
         "properties": {
           "commit_url": {
             "$id": "#/properties/commits/items/properties/commit_url",
