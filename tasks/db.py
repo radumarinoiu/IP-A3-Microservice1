@@ -91,10 +91,20 @@ def check_task_fields(task):
         if field not in task:
             return jsonify({"error": "Field {} is required but not present.".format(field)}), False
 
-    for task_field in task_field_lists:
-        if task_field in task:
-            for task_field_field in task_field_lists[task_field]:
-                if task_field_field not in task[task_field]:
+    for field in list(field in task):
+        if field not in task_fields and field not in task_field_lists:
+            del task[field]
+
+
+    for task_field_child in task_field_lists:
+        if task_field_child in task:
+            for task_field_child_field in task_field_lists[task_field_child]:
+                if task_field_child_field not in task[task_field_child]:
                     return jsonify({"error": "Field {} from {} is required but not present.".format(
-                        task_field_field, task_field)}), False
+                        task_field_child_field, task_field_child)}), False
+
+            for task_field_field in list(field in task[task_field_child]):
+                if task_field_field not in task_field_lists[task_field_child]:
+                    del task[task_field_field]
+
     return jsonify({}), True
