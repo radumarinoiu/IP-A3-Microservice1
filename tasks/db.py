@@ -5,6 +5,7 @@ from pymongo import MongoClient
 from bson.objectid import ObjectId
 from bson.errors import InvalidId as InvalidIdException
 from flask import jsonify
+from jsonschema import validate
 
 db_username = "devs"
 db_password = "devs"
@@ -42,9 +43,8 @@ def post_task(task):
         return jsonify({"error": "Empty request."}), 400
     
     # Check task's fields
-    message, result = check_task_fields(task)
-    if not result:
-        return jsonify(message), 400
+    if not check_object(task, task_schema):
+        return jsonify({"error": "Invalid task format."}}), 400
 
     post_id = coll.insert_one(task).inserted_id
     task["_id"] = str(post_id)
