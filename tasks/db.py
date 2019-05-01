@@ -74,6 +74,9 @@ def deleteById(id):
     return jsonify({}), 200
 
 
+##################################### HELPER FUNCTIONS #####################################
+
+
 def check_task_fields(task):
     task_fields = ["name", "category", "department", "creator", 
     "description", "priority", "status", "deadline", "timestamp"]
@@ -89,7 +92,7 @@ def check_task_fields(task):
 
     for field in task_fields:
         if field not in task:
-            return jsonify({"error": "Field {} is required but not present.".format(field)}), False
+            return {"error": "Field {} is required but not present.".format(field)}, False
 
     for field in list(field for field in task):
         if field not in task_fields and field not in task_field_lists:
@@ -100,11 +103,11 @@ def check_task_fields(task):
         if task_field_child in task:
             for task_field_child_field in task_field_lists[task_field_child]:
                 if task_field_child_field not in task[task_field_child]:
-                    return jsonify({"error": "Field {} from {} is required but not present.".format(
-                        task_field_child_field, task_field_child)}), False
+                    return {"error": "Field {} from {} is required but not present.".format(
+                        task_field_child_field, task_field_child)}, False
 
             for task_field_field in list(field for field in task[task_field_child]):
                 if task_field_field not in task_field_lists[task_field_child]:
                     del task[task_field_field]
 
-    return jsonify({}), True
+    return {}, True
