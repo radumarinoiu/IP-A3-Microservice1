@@ -11,7 +11,9 @@ def get_all_tasks():
 
 @app.route("/", methods = ["POST"])
 def add_task():
-    return db.post_task(request.get_json())
+    if not request.is_json():
+        return {"error": "Request is not a valid json."}, 400
+    return db.post_task(request.json)
 
 @app.route("/<task_id>", methods = ["GET"])
 def get_task_by_id(task_id):
@@ -23,7 +25,9 @@ def delete_task(task_id):
 
 @app.route("/", methods = ["PUT"])
 def update_task():
-    return db.put_task(request.get_json())
+    if not request.is_json():
+        return {"error": "Request is not a valid json."}, 400
+    return db.put_task(request.json)
 
 
 
