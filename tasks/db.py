@@ -3,6 +3,7 @@ import json
 
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from bson.errors import InvalidId as InvalidIdException
 from flask import jsonify
 
 db_username = "devs"
@@ -21,7 +22,10 @@ def getAll():
 
 
 def getById(task_id):
-    task = coll.find_one({"_id" : ObjectId(task_id)})
+    try:
+        task = coll.find_one({"_id" : ObjectId(task_id)})
+    except InvalidIdException:
+        return jsonify({"error": "Invalid id"}), 400
     if not task:
         return jsonify({}), 404
     else:
