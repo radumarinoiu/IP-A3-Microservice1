@@ -10,8 +10,8 @@ from flask import make_response
 db_username = "devs"
 db_password = "devs"
 
-client = MongoClient("mongodb://{}:{}@localhost/tasks_db".format(db_username, db_password))
-db = client["tasks_db"]
+client = MongoClient("mongodb://{}:{}@localhost/admin".format(db_username, db_password))
+db = client["microservice1"]
 coll = db["tasks"]
 
 
