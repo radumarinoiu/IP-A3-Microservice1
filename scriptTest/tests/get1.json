@@ -1,0 +1,11 @@
+{
+  "input": {
+    "method": "get",
+    "url": "http://vvtsoft.ddns.net:5121/",
+    "object": {}
+  },
+  "output": {
+    "status_code": 200,
+    "object": {}
+  }
+}

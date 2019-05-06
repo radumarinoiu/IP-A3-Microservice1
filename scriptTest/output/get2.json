@@ -1,0 +1,16 @@
+{
+    "expected": {
+        "status_code": 200, 
+        "object": {}
+    }, 
+    "got": {
+        "status_code": 200, 
+        "object": {
+            "nume": "merg2e", 
+            "_id": "5cac8f3710ecd1046d3ee412", 
+            "creare": 1323131, 
+            "expirare": 21121
+        }
+    }, 
+    "result": false
+}
