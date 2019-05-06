@@ -3,9 +3,9 @@ import json
 
 from pymongo import MongoClient
 from bson.objectid import ObjectId
+from bson.errors import InvalidId as InvalidIdException
 from flask import jsonify
-from flask import Response
-from flask import make_response
+from jsonschema import validate
 
 db_username = "devs"
 db_password = "devs"
@@ -14,145 +14,114 @@ client = MongoClient("mongodb://{}:{}@localhost/admin".format(db_username, db_pa
 db = client["microservice1"]
 coll = db["tasks"]
 
+
+with open("task_schema.json", "rb") as f:
+    task_schema = json.load(f)
+
+
 def getAll():
-    getAllList = list(coll.find({}))
-    for task in getAllList:
+    tasks_list = list(coll.find({}))
+    for task in tasks_list:
         task["_id"] = str(task["_id"])
-    return jsonify(getAllList)
+    return jsonify(tasks_list), 200
 
-def getById(id):
-    getByIdElem = coll.find_one({"_id" : ObjectId(id)})
-    if not getByIdElem:
-        return make_response(jsonify(""), 404)
+
+def getById(task_id):
+    try:
+        task = coll.find_one({"_id" : ObjectId(task_id)})
+    except InvalidIdException:
+        return jsonify({"error": "Invalid id"}), 400
+    if not task:
+        return jsonify({}), 404
     else:
-        getByIdElem["_id"] = str(getByIdElem["_id"])
-        return jsonify(getByIdElem)
-
-def check_deadline(deadline):
-    if deadline["date"] is "null" or deadline["time"] is "null":
-        return False
-    return True
-
-def check_status(task):
-    if task["status"] == "done":
-        return True
-    return False
-    
-
-
-def check_participants(participant):
-    if participant["id"] is "null":
-        return "participant has not id set"
-    if participant["name"] is "null":
-        return "participant name has not been set"
-    if participant["thumbnail"] is "null":
-        return "participant thumbnail is not set"
-    if participant["role"] is "null":
-        return "participant role is not set"
+        task["_id"] = str(task["_id"])
+        return jsonify(task), 200
 
 
 def post_task(task):
-    if task["id"] is "null":
-        return "asd"
-    if task["name"] is "null":
-        return "name not found"
-    if task["category"] is "null":
-        return "category not found"
-    if task["department"] is "null":
-        return "department not found"
-    if check_deadline(task["deadline"]) is False:
-        return "deadline is not set"
-    if task["creator"] is "null":
-        return "deadline not found"
-    if task["description"] is "null":
-        return "description is not set"
-    if task["priority"] is "null":
-        return "priority is not set"
-    if task["status"] is "null":
-        return "status is not set"
-    for part in task["participants"]:
-        if check_participants(part) is False:
-            return "participant is not set"
-    for sub_task in task["sub-tasks"]:
-        if sub_task["subtask-id"] is "null":
-            return "subtask id is not set"
-        if sub_task["deadline"] is False:
-            return "subtask deadline is not set"
-        if sub_task["status"] is "null":
-            return "subtask status is not set"
-        if sub_task["priority"] is "null":
-            return "subtask priority is not set"
-        for part in sub_task["participants"]:
-            if check_participants(part) is False:
-                return "subtask participant is not set"
-    for dependecy in task["dependencies"]:
-        if sub_task["task-id"] is "null":
-            return "subtask id is not set"
-        if sub_task["deadline"] is False:
-            return "subtask deadline is not set"
-        if sub_task["status"] is "null":
-            return "subtask status is not set"
-        if sub_task["priority"] is "null":
-            return "subtask priority is not set"
-        for part in sub_task["participants"]:
-            if check_participants(part) is False:
-                return "subtask participant is not set"
-    for reverse_dependecy in task["reverse-dependecies"]:
-        if reverse_dependecy["task-id"] is "null":
-            return "subtask id is not set"
-        if reverse_dependecy["deadline"] is False:
-            return "subtask deadline is not set"
-        if reverse_dependecy["status"] is "null":
-            return "subtask status is not set"
-        if reverse_dependecy["priority"] is "null":
-            return "subtask priority is not set"
-        for part in reverse_dependecy["participants"]:
-            if check_participants(part) is False:
-                return "subtask participant is not set"
-    for commit in task["commits"]:
-        if commit["userId"] is "null":
-            return "commit user id is not set"
-        if commit["username"] is "null":
-            return "commit username is not set"
-        if commit["changes"] is "null":
-            return "commit change is not set"
-        if commit["date"] is "null":
-            return "commit date is not set"
-    for sub_task in task["sub-task"]:
-        post = json.load(sub_task)
-        post_id = coll.insert_one(post).inserted_id
-    post = json.load(task)
-    post_id = coll.insert_one(post).inserted_id
-    return str(post_id) + " was posted"
+    if not task:
+        return jsonify({"error": "Empty request."}), 400
+    
+    # Check task's fields
+    if not check_object(task, task_schema):
+        return jsonify({"error": "Invalid task format."}), 400
+
+    post_id = coll.insert_one(task).inserted_id
+    task["_id"] = str(post_id)
+    return jsonify(task), 201
 
 
 def put_task(task):
-    if task["_id"] is "null":
-        return "no id was sent"
-    change = True
-    if task["status"] == "done":
-        for sub_task in task["sub-task"]:
-            if check_status is False:
-                change = False
-                break
-    if change == True:
-        coll.update(
-            { '_id': ObjectId(task['_id']) },
-            { "$set": { 'status': 'done' } },
-            upsert = False
-        )
+    if not task:
+        return jsonify({"error": "Empty request."}), 400
+    if "_id" not in task:
+        return jsonify({"error": "Put request missing _id"}), 400
     
+    # Check task's fields
+    message, result = check_task_fields(task)
+    if not result:
+        return jsonify(message), 400
+
+    task["_id"] = ObjectId(task["_id"])
     coll.update(
-        { '_id': ObjectId(task['_id']) },
-        { "$set": { 'nume': task['nume'], 'creare': task['creare'], 'expirare': task['expirare'] } },
-        upsert = False
-    )
-    return str(task['_id'])
+        {"_id": task["_id"]},
+        {"$set": task},
+        upsert=False)
+    task["_id"] = str(task["_id"])
+    return jsonify(task), 200
+
 
 def deleteById(id):
     deletedId = coll.find_one({"_id" : ObjectId(id)})
     deletedId["_id"] = str(deletedId["_id"])
     coll.remove({"_id" : ObjectId(id)})
-    # result = {'a' : 'b'}
-    return make_response(jsonify(""), 200)
+    return jsonify({}), 200
 
+
+##################################### HELPER FUNCTIONS #####################################
+
+
+def check_task_fields(task):
+    task_single_fields = ["name", "category", "department", "creator", 
+    "description", "priority", "status", "deadline", "timestamp"]
+    task_list_fields = {
+        "participants": ["_id"],
+        "sub-tasks": ["name", "description", "deadline", "status", "priority"],
+        # "dependencies": ["task-id", "deadline", "status", "priority"],
+        # "reverse-dependecies": ["task-id", "deadline", "status", "priority"],
+        "dependencies": ["_id"],
+        "reverse-dependecies": ["_id"],
+        "commits": ["commit_url", "username", "changes", "timestamp"]
+    }
+
+    ret_obj, ret_val = check_custom_fields(task, task_single_fields)
+    if not ret_val:
+        return {"error": "Field {} is required but not present.".format(ret_obj)}, False
+
+    for task_list_field in task_list_fields:
+        if task_list_field in task:
+            ret_obj[task_list_field] = []
+            for task_list_field_entity in task[task_list_field]:
+                ret_obj_child, ret_val = check_custom_fields(task_list_field_entity, task_list_fields[task_list_field])
+                if not ret_val:
+                    return {"error": "Field {} of one of the children of {} is required but not present.".format(ret_obj_child, task_list_field)}, False
+                ret_obj[task_list_field].append(ret_obj_child)
+
+    return {}, True
+
+
+def check_custom_fields(obj, fields, ret_obj = {}):
+    for field in fields:
+        if field not in obj:
+           return field, False
+    for field in obj:
+        if field in fields:
+            ret_obj[field] = obj[field]
+    return ret_obj, True
+
+def check_object(obj, schema):
+    try:
+        validate(instance=obj, schema=schema)
+        return True
+    except:
+        return False

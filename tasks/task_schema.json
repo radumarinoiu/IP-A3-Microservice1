@@ -1,0 +1,318 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "Task Object JSON Schema",
+  "required": [
+    "name",
+    "category",
+    "department",
+    "creator",
+    "description",
+    "priority",
+    "status",
+    "deadline",
+    "timestamp"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "name": {
+      "$id": "#/properties/name",
+      "type": "string",
+      "title": "The Name Schema",
+      "default": "",
+      "examples": [
+        ""
+      ],
+      "pattern": "^(.*)$"
+    },
+    "category": {
+      "$id": "#/properties/category",
+      "type": "string",
+      "title": "The Category Schema",
+      "default": "",
+      "examples": [
+        ""
+      ],
+      "pattern": "^(.*)$"
+    },
+    "department": {
+      "$id": "#/properties/department",
+      "type": "string",
+      "title": "The Department Schema",
+      "default": "",
+      "examples": [
+        ""
+      ],
+      "pattern": "^(.*)$"
+    },
+    "creator": {
+      "$id": "#/properties/creator",
+      "type": "string",
+      "title": "The Creator Schema",
+      "default": "",
+      "examples": [
+        ""
+      ],
+      "pattern": "^(.*)$"
+    },
+    "description": {
+      "$id": "#/properties/description",
+      "type": "string",
+      "title": "The Description Schema",
+      "default": "",
+      "examples": [
+        ""
+      ],
+      "pattern": "^(.*)$"
+    },
+    "priority": {
+      "$id": "#/properties/priority",
+      "type": "string",
+      "title": "The Priority Schema",
+      "default": "",
+      "examples": [
+        ""
+      ],
+      "pattern": "^(.*)$"
+    },
+    "status": {
+      "$id": "#/properties/status",
+      "type": "string",
+      "title": "The Status Schema",
+      "default": "",
+      "examples": [
+        ""
+      ],
+      "pattern": "^(.*)$"
+    },
+    "deadline": {
+      "$id": "#/properties/deadline",
+      "type": "string",
+      "title": "The Deadline Schema",
+      "default": "",
+      "examples": [
+        ""
+      ],
+      "pattern": "^(.*)$"
+    },
+    "timestamp": {
+      "$id": "#/properties/timestamp",
+      "type": "string",
+      "title": "The Timestamp Schema",
+      "default": "",
+      "examples": [
+        ""
+      ],
+      "pattern": "^(.*)$"
+    },
+    "participants": {
+      "$id": "#/properties/participants",
+      "type": "array",
+      "title": "The Participants Schema",
+      "items": {
+        "$id": "#/properties/participants/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "required": [
+          "_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "_id": {
+            "$id": "#/properties/participants/items/properties/_id",
+            "type": "string",
+            "title": "The _id Schema",
+            "default": "",
+            "examples": [
+              ""
+            ],
+            "pattern": "^(.*)$"
+          }
+        }
+      }
+    },
+    "sub-tasks": {
+      "$id": "#/properties/sub-tasks",
+      "type": "array",
+      "title": "The Sub-tasks Schema",
+      "items": {
+        "$id": "#/properties/sub-tasks/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "required": [
+          "name",
+          "description",
+          "deadline",
+          "status",
+          "priority"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "$id": "#/properties/sub-tasks/items/properties/name",
+            "type": "string",
+            "title": "The Name Schema",
+            "default": "",
+            "examples": [
+              ""
+            ],
+            "pattern": "^(.*)$"
+          },
+          "description": {
+            "$id": "#/properties/sub-tasks/items/properties/description",
+            "type": "string",
+            "title": "The Description Schema",
+            "default": "",
+            "examples": [
+              ""
+            ],
+            "pattern": "^(.*)$"
+          },
+          "deadline": {
+            "$id": "#/properties/sub-tasks/items/properties/deadline",
+            "type": "string",
+            "title": "The Deadline Schema",
+            "default": "",
+            "examples": [
+              ""
+            ],
+            "pattern": "^(.*)$"
+          },
+          "status": {
+            "$id": "#/properties/sub-tasks/items/properties/status",
+            "type": "string",
+            "title": "The Status Schema",
+            "default": "",
+            "examples": [
+              ""
+            ],
+            "pattern": "^(.*)$"
+          },
+          "priority": {
+            "$id": "#/properties/sub-tasks/items/properties/priority",
+            "type": "string",
+            "title": "The Priority Schema",
+            "default": "",
+            "examples": [
+              ""
+            ],
+            "pattern": "^(.*)$"
+          }
+        }
+      }
+    },
+    "dependencies": {
+      "$id": "#/properties/dependencies",
+      "type": "array",
+      "title": "The Dependencies Schema",
+      "items": {
+        "$id": "#/properties/dependencies/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "required": [
+          "_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "_id": {
+            "$id": "#/properties/dependencies/items/properties/_id",
+            "type": "string",
+            "title": "The _id Schema",
+            "default": "",
+            "examples": [
+              ""
+            ],
+            "pattern": "^(.*)$"
+          }
+        }
+      }
+    },
+    "reverse-dependecies": {
+      "$id": "#/properties/reverse-dependecies",
+      "type": "array",
+      "title": "The Reverse-dependecies Schema",
+      "items": {
+        "$id": "#/properties/reverse-dependecies/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "required": [
+          "_id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "_id": {
+            "$id": "#/properties/reverse-dependecies/items/properties/_id",
+            "type": "string",
+            "title": "The _id Schema",
+            "default": "",
+            "examples": [
+              ""
+            ],
+            "pattern": "^(.*)$"
+          }
+        }
+      }
+    },
+    "commits": {
+      "$id": "#/properties/commits",
+      "type": "array",
+      "title": "The Commits Schema",
+      "items": {
+        "$id": "#/properties/commits/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "required": [
+          "commit_url",
+          "username",
+          "changes",
+          "timestamp"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "commit_url": {
+            "$id": "#/properties/commits/items/properties/commit_url",
+            "type": "string",
+            "title": "The Commit_url Schema",
+            "default": "",
+            "examples": [
+              ""
+            ],
+            "pattern": "^(.*)$"
+          },
+          "username": {
+            "$id": "#/properties/commits/items/properties/username",
+            "type": "string",
+            "title": "The Username Schema",
+            "default": "",
+            "examples": [
+              ""
+            ],
+            "pattern": "^(.*)$"
+          },
+          "changes": {
+            "$id": "#/properties/commits/items/properties/changes",
+            "type": "string",
+            "title": "The Changes Schema",
+            "default": "",
+            "examples": [
+              ""
+            ],
+            "pattern": "^(.*)$"
+          },
+          "timestamp": {
+            "$id": "#/properties/commits/items/properties/timestamp",
+            "type": "string",
+            "title": "The Timestamp Schema",
+            "default": "",
+            "examples": [
+              ""
+            ],
+            "pattern": "^(.*)$"
+          }
+        }
+      }
+    }
+  }
+}
