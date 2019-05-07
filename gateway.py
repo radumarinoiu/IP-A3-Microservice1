@@ -31,9 +31,9 @@ def add_task():
     resp = requests.post(TASKS_MS_ADDRESS_PORT, json=request.json, stream=True)
     return resp.raw.read(), resp.status_code, resp.headers.items()
 
-@app.route("/tasks/<task_id>", methods = ["PUT"])
-def update_task(task_id):
-    resp = requests.put(TASKS_MS_ADDRESS_PORT + "/" + task_id, json=request.json, stream=True)
+@app.route("/tasks", methods = ["PUT"])
+def update_task():
+    resp = requests.put(TASKS_MS_ADDRESS_PORT, json=request.json, stream=True)
     return resp.raw.read(), resp.status_code, resp.headers.items()
 
 @app.route("/tasks/<task_id>", methods = ["DELETE"])
