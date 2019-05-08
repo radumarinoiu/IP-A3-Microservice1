@@ -53,7 +53,9 @@ def post_task(task):
             if not check_object(subtask, task_schema):
                 return jsonify({"error": "Invalid subtask format."}), 400
             # TODO: We should handle rollback here in case of an error while inserting
-            subtask = {"_id": str(coll.insert_one(subtask).inserted_id)}
+            subtask_id = coll.insert_one(subtask).inserted_id
+            subtask = {"_id": str(subtask_id)}
+            logging.debug(subtask)
 
     logging.debug(task)
 
