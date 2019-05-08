@@ -1,5 +1,7 @@
-import pymongo
 import json
+import pymongo
+import logging
+import traceback
 
 from pymongo import MongoClient
 from bson.objectid import ObjectId
@@ -124,4 +126,5 @@ def check_object(obj, schema):
         validate(instance=obj, schema=schema)
         return True
     except:
+        logging.error(traceback.format_exc())
         return False
