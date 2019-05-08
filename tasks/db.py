@@ -55,6 +55,8 @@ def post_task(task):
             # TODO: We should handle rollback here in case of an error while inserting
             subtask = {"_id": str(coll.insert_one(subtask).inserted_id)}
 
+    logging.debug(task)
+
     post_id = coll.insert_one(task).inserted_id
     task["_id"] = str(post_id)
     return jsonify(task), 201
