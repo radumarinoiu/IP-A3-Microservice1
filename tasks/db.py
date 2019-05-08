@@ -48,6 +48,14 @@ def post_task(task):
     if not check_object(task, task_schema):
         return jsonify({"error": "Invalid task format."}), 400
 
+    if "sub-tasks" in task and task["sub-tasks"]:
+        new_subtasks = []
+        for subtask in task["sub-tasks"]:
+            if not check_object(subtask, task_schema):
+                return jsonify({"error": "Invalid subtask format."}), 400
+            # TODO: We should handle rollback here in case of an error while inserting
+            new_subtasks.append({"_id": str(coll.insert_one(subtask).inserted_id)})
+        task["sub-tasks"] = new_subtasks
     post_id = coll.insert_one(task).inserted_id
     task["_id"] = str(post_id)
     return jsonify(task), 201
