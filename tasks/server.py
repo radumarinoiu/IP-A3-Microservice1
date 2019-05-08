@@ -1,7 +1,11 @@
+import db
+import logging
+
 from flask import Flask
 from flask import request
 from flask import make_response
-import db
+
+logging.basicConfig(filename="tasks.log", level=logging.DEBUG, filemode="w")
 
 app = Flask(__name__)
 
