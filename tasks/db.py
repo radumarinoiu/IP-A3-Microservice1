@@ -57,18 +57,17 @@ def execute_post_action(task):
     if "sub-tasks" in task and task["sub-tasks"]:
         new_subtasks = []
         for subtask in task["sub-tasks"]:
-            if not check_object(subtask, task_schema):
-                return {"error": "Invalid subtask format."}, 400
             subtask_json_result, subtask_status_code = execute_post_action(subtask)
             if subtask_status_code == 201:
-                new_subtasks.append({"_id": str(coll.insert_one(subtask).inserted_id)})
+                new_subtasks += subtask_json_result["sub-tasks"]
             else:
                 try_rolling_back_task_changes(new_subtasks)
+                # TODO: This should be replaced with the proper recursive deletion if a task's subtasks should be removed on parent task removal.
                 return subtask_json_result, subtask_status_code
         task["sub-tasks"] = new_subtasks
     post_id = coll.insert_one(task).inserted_id
     task["_id"] = str(post_id)
-    return jsonify(task), 201
+    return task, 201
 
 
 def try_rolling_back_task_changes(task_id_list):
