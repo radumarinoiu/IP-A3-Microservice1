@@ -41,24 +41,46 @@ def getById(task_id):
 
 
 def post_task(task):
+    json_data, status_code = execute_post_action(task)
+    return jsonify(json_data), status_code
+
+
+
+def execute_post_action(task):
     if not task:
-        return jsonify({"error": "Empty request."}), 400
+        return {"error": "Empty request."}, 400
     
     # Check task's fields
     if not check_object(task, task_schema):
-        return jsonify({"error": "Invalid task format."}), 400
+        return {"error": "Invalid task format."}, 400
 
     if "sub-tasks" in task and task["sub-tasks"]:
         new_subtasks = []
         for subtask in task["sub-tasks"]:
-            if not check_object(subtask, task_schema):
-                return jsonify({"error": "Invalid subtask format."}), 400
-            # TODO: We should handle rollback here in case of an error while inserting
-            new_subtasks.append({"_id": str(coll.insert_one(subtask).inserted_id)})
+            subtask_json_result, subtask_status_code = execute_post_action(subtask)
+            if subtask_status_code == 201:
+                new_subtasks += subtask_json_result["sub-tasks"]
+            else:
+                try_rolling_back_task_changes(new_subtasks)
+                # TODO: This should be replaced with the proper recursive deletion if a task's subtasks should be removed on parent task removal.
+                return subtask_json_result, subtask_status_code
         task["sub-tasks"] = new_subtasks
     post_id = coll.insert_one(task).inserted_id
     task["_id"] = str(post_id)
-    return jsonify(task), 201
+    return task, 201
+
+
+def try_rolling_back_task_changes(task_id_list):
+    for task_id in task_id_list:
+        found = False
+        try:
+            found = bool(coll.find_one({"_id" : ObjectId(task_id)}))
+            coll.remove({"_id" : ObjectId(task_id)})
+        except:
+            if found:
+                logging.error("Failed rolling back changes with error:\n{}".format(traceback.format_exc()))
+            else:
+                logging.warning("Task missing so we failed rolling back changes with error:\n{}".format(traceback.format_exc()))
 
 
 def put_task(task):
@@ -68,9 +90,8 @@ def put_task(task):
         return jsonify({"error": "Put request missing _id"}), 400
     
     # Check task's fields
-    message, result = check_task_fields(task)
-    if not result:
-        return jsonify(message), 400
+    if not check_object(task, task_schema):
+        return jsonify({"error": "Invalid task format."}), 400
 
     task["_id"] = ObjectId(task["_id"])
     coll.update(
@@ -81,53 +102,15 @@ def put_task(task):
     return jsonify(task), 200
 
 
-def deleteById(id):
-    deletedId = coll.find_one({"_id" : ObjectId(id)})
+def deleteById(task_id):
+    deletedId = coll.find_one({"_id" : ObjectId(task_id)})
     deletedId["_id"] = str(deletedId["_id"])
-    coll.remove({"_id" : ObjectId(id)})
+    coll.remove({"_id" : ObjectId(task_id)})
     return jsonify({}), 200
 
 
 ##################################### HELPER FUNCTIONS #####################################
 
-
-def check_task_fields(task):
-    task_single_fields = ["name", "category", "department", "creator", 
-    "description", "priority", "status", "deadline", "timestamp"]
-    task_list_fields = {
-        "participants": ["_id"],
-        "sub-tasks": ["name", "description", "deadline", "status", "priority"],
-        # "dependencies": ["task-id", "deadline", "status", "priority"],
-        # "reverse-dependecies": ["task-id", "deadline", "status", "priority"],
-        "dependencies": ["_id"],
-        "reverse-dependecies": ["_id"],
-        "commits": ["commit_url", "username", "changes", "timestamp"]
-    }
-
-    ret_obj, ret_val = check_custom_fields(task, task_single_fields)
-    if not ret_val:
-        return {"error": "Field {} is required but not present.".format(ret_obj)}, False
-
-    for task_list_field in task_list_fields:
-        if task_list_field in task:
-            ret_obj[task_list_field] = []
-            for task_list_field_entity in task[task_list_field]:
-                ret_obj_child, ret_val = check_custom_fields(task_list_field_entity, task_list_fields[task_list_field])
-                if not ret_val:
-                    return {"error": "Field {} of one of the children of {} is required but not present.".format(ret_obj_child, task_list_field)}, False
-                ret_obj[task_list_field].append(ret_obj_child)
-
-    return {}, True
-
-
-def check_custom_fields(obj, fields, ret_obj = {}):
-    for field in fields:
-        if field not in obj:
-           return field, False
-    for field in obj:
-        if field in fields:
-            ret_obj[field] = obj[field]
-    return ret_obj, True
 
 def check_object(obj, schema):
     try:
