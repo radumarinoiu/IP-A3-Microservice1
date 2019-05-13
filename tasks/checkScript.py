@@ -16,10 +16,10 @@ with open('object.json') as json_file:
     for data in json_data['sub-tasks']:
         isCompleted = 0
         subTask = json.load(db.getById(data['id']))
-        if(subTask['status'] == 'complete'):
+        if(subTask['status'] == '1'):
             isCompleted = 1
         else:
             isCompleted = 0
             break
     if(isCompleted == 1):
-        json_data['status'] = 'complete'
+        json_data['status'] = '1'
