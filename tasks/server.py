@@ -4,10 +4,12 @@ import logging
 from flask import Flask
 from flask import request
 from flask import make_response
+from flask_cors import CORS
 
 logging.basicConfig(filename="tasks.log", level=logging.DEBUG, filemode="w")
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/", methods = ["GET"])
 def get_all_tasks():

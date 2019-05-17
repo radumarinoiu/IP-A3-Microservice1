@@ -1,8 +1,10 @@
 from flask import Flask
 from flask import request
+from flask_cors import CORS
 import db
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/")
 def get_sorted_tasks():
