@@ -88,12 +88,12 @@ def put_task(task):
         return jsonify({"error": "Empty request."}), 400
     if "_id" not in task:
         return jsonify({"error": "Put request missing _id"}), 400
-    
+    task_id = task.pop("_id")
     # Check task's fields
     if not check_object(task, task_schema):
         return jsonify({"error": "Invalid task format."}), 400
 
-    task["_id"] = ObjectId(task["_id"])
+    task["_id"] = ObjectId(task_id)
     coll.update(
         {"_id": task["_id"]},
         {"$set": task},
