@@ -59,7 +59,7 @@ def execute_post_action(task):
         for subtask in task["sub-tasks"]:
             subtask_json_result, subtask_status_code = execute_post_action(subtask)
             if subtask_status_code == 201:
-                new_subtasks += subtask_json_result["sub-tasks"]
+                new_subtasks.append(subtask_json_result["_id"])
             else:
                 try_rolling_back_task_changes(new_subtasks)
                 # TODO: This should be replaced with the proper recursive deletion if a task's subtasks should be removed on parent task removal.
