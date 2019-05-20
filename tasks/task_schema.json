@@ -13,7 +13,8 @@
     "priority",
     "status",
     "deadline",
-    "timestamp"
+    "timestamp",
+    "hour estimation"
   ],
   "additionalProperties": false,
   "properties": {
@@ -101,6 +102,16 @@
       "$id": "#/properties/timestamp",
       "type": "string",
       "title": "The Timestamp Schema",
+      "default": "",
+      "examples": [
+        ""
+      ],
+      "pattern": "^(.*)$"
+    },
+    "hour estimation": {
+      "$id": "#/properties/hour_estimation",
+      "type": "string",
+      "title": "The Hour Estimation Schema",
       "default": "",
       "examples": [
         ""
