@@ -13,17 +13,16 @@ from jsonschema import validate
 
 isCompleted = 0
 
-with open('object.json') as json_file:
-    json_data = json.load(json_file)
-    for data in json_data[0]['sub-tasks']:
-        subTask = json.load(db.getById(data['_id']))
-        if(subTask['status'] == '1'):
-            isCompleted = 1
-        else:
-            isCompleted = 0
-            break
-    if(isCompleted == 1):
-        json_data['status'] = '1'
-        print "Completed"
+json_data = json.load(db.getById('5cd8130110ecd110d6d61f15'))
+for data in json_data[0]['sub-tasks']:
+    subTask = json.load(db.getById(data['_id']))
+    if(subTask['status'] == '1'):
+        isCompleted = 1
     else:
-        print "Not Completed"
+        isCompleted = 0
+        break
+if(isCompleted == 1):
+    json_data['status'] = '1'
+    print "Completed"
+else:
+    print "Not Completed"
