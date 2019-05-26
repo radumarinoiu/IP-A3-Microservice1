@@ -6,22 +6,30 @@ import db
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/")
+
+@app.route("/", methods=["GET"])
 def get_all_tasks():
-    return db.getAll()
+    return db.get_all()
 
-@app.route("/", methods = ["POST"])
-def add_assignement():
-    return db.post_assignement(request.get_json())
 
-@app.route("/<id>")
+@app.route("/<task_id>", methods=["GET"])
 def get_task_by_id(task_id):
-    return db.getById(task_id)
+    return db.get_by_id(task_id)
 
-@app.route("/", methods = ["PUT"])
-def update_assignement():
-    return db.put_assignement(request.get_json())
 
+@app.route("/", methods=["POST"])
+def add_assignment():
+    return db.post_assignment(request.get_json())
+
+
+@app.route("/", methods=["PUT"])
+def update_assignment():
+    return db.put_assignment(request.get_json())
+
+
+@app.route("/<task_id>", methods=["DELETE"])
+def delete_by_id(task_id):
+    return db.delete_by_id(task_id)
 
 
 if __name__ == "__main__":
