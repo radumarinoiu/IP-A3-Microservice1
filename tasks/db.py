@@ -103,10 +103,16 @@ def put_task(task):
 
 
 def deleteById(task_id):
-    deletedId = coll.find_one({"_id" : ObjectId(task_id)})
-    deletedId["_id"] = str(deletedId["_id"])
-    coll.remove({"_id" : ObjectId(task_id)})
-    return jsonify({}), 200
+    try:
+        deletedId = coll.find_one({"_id" : ObjectId(task_id)})
+    except InvalidIdException:
+        return jsonify({"error" : "Invalid id"}), 400
+    if not deletedId:
+        return jsonify({}), 400
+    else:
+        deletedId["_id"] = str(deletedId["_id"])
+        coll.remove({"_id" : ObjectId(task_id)})
+        return jsonify({}), 200
 
 def checkForUpdate(task_id):
     try:
