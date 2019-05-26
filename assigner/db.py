@@ -36,7 +36,7 @@ def post_assignment(assignment):
     if not assignment:
         return jsonify({"error": "Empty request."}), 400
     if not check_object(assignment, assignment_schema):
-        return {"error": "Invalid task format."}, 400
+        return jsonify({"error": "Invalid task format."}), 400
 
     post_id = coll.insert_one(assignment).inserted_id
     assignment["_id"] = str(post_id)
