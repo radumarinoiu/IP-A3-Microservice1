@@ -40,7 +40,7 @@ def post_assignment(assignment):
 
     post_id = coll.insert_one(assignment).inserted_id
     assignment["_id"] = str(post_id)
-    return assignment, 201
+    return jsonify(assignment), 201
 
 
 def put_assignment(assignment):
