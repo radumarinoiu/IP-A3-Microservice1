@@ -123,7 +123,7 @@ def checkForUpdate(task_id):
         json_data['status'] = '1'
         return jsonify({"task" : "Completed"}), 200
     else:
-        print jsonify({"task" : "Not Completed"}), 200
+        return jsonify({"task" : "Not Completed"}), 200
 
 
 ##################################### HELPER FUNCTIONS #####################################
