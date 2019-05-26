@@ -103,9 +103,10 @@ def put_task(task):
 
 
 def deleteById(task_id):
-    deletedId = coll.find_one({"_id" : ObjectId(task_id)})
-    deletedId["_id"] = str(deletedId["_id"])
-    coll.remove({"_id" : ObjectId(task_id)})
+    obj = coll.find_one({"_id": ObjectId(task_id)})
+    if not obj:
+        return jsonify({}), 404
+    coll.remove({"_id": ObjectId(task_id)})
     return jsonify({}), 200
 
 
