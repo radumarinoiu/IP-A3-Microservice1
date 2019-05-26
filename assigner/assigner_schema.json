@@ -1,0 +1,34 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://example.com/root.json",
+  "type": "object",
+  "title": "The Root Schema",
+  "required": [
+    "id_task",
+    "id_user"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id_task": {
+      "$id": "#/properties/id_task",
+      "type": "string",
+      "title": "The Id_task Schema",
+      "default": "",
+      "examples": [
+        "5cde74f010ecd1046dbee691"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "id_user": {
+      "$id": "#/properties/id_user",
+      "type": "string",
+      "title": "The Id_user Schema",
+      "default": "",
+      "examples": [
+        "5cde74f010ecd1046dbee691"
+      ],
+      "pattern": "^(.*)$"
+    }
+  }
+}
