@@ -110,7 +110,7 @@ def deleteById(task_id):
 
 def checkForUpdate(task_id):
     isCompleted = 0
-    # json_data = json.loads(getById(task_id))
+    json_data = coll.find_one({"_id" : ObjectId(task_id)})
     # for data in json_data[0]['sub-tasks']:
     #     subTask = json.load(getById(data['_id']))
     #     if(subTask['status'] == '1'):
@@ -123,7 +123,7 @@ def checkForUpdate(task_id):
     #     return jsonify({"task" : "Completed"}), 200
     # else:
     #     return jsonify({"task" : "Not Completed"}), 200
-    return jsonify(getById(task_id)), 200
+    return jsonify(json_data), 200
 
 
 ##################################### HELPER FUNCTIONS #####################################
