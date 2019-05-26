@@ -113,7 +113,8 @@ def checkForUpdate(task_id):
     json_data = coll.find_one({"_id" : ObjectId(task_id)})
     json_data["_id"] = str(json_data["_id"])
     for data in json_data[0]['sub-tasks']:
-        subTask = json.load(getById(data['_id']))
+        subTask = coll.find_one({"_id" : ObjectId(data['_id'])})
+        subTask["_id"] = str(json_data["_id"])
         if(subTask['status'] == '1'):
             isCompleted = 1
         else:
