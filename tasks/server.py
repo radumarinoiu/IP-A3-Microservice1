@@ -33,7 +33,7 @@ def update_task():
         return {"error": "Request is not a valid json."}, 400
     return db.put_task(request.json)
 
-@app.route("/check/<task_id>", methods = ["GET"])
+@app.route("/<task_id>", methods = ["PATCH"])
 def check_task(task_id):
     return db.checkForUpdate(task_id)
 
