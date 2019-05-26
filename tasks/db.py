@@ -112,20 +112,19 @@ def checkForUpdate(task_id):
     isCompleted = 0
     json_data = coll.find_one({"_id" : ObjectId(task_id)})
     json_data["_id"] = str(json_data["_id"])
-    # for data in json_data[0]['sub-tasks']:
-    #     subTask = json.load(getById(data['_id']))
-    #     if(subTask['status'] == '1'):
-    #         isCompleted = 1
-    #     else:
-    #         isCompleted = 0
-    #         break
-    # if(isCompleted == 1):
-    #     json_data['status'] = '1'
-    #     return jsonify({"task" : "Completed"}), 200
-    # else:
-    #     return jsonify({"task" : "Not Completed"}), 200
-    return jsonify(json_data), 200
-
+    for data in json_data[0]['sub-tasks']:
+        subTask = json.load(getById(data['_id']))
+        if(subTask['status'] == '1'):
+            isCompleted = 1
+        else:
+            isCompleted = 0
+            break
+    if(isCompleted == 1):
+        json_data['status'] = '1'
+        return jsonify({"task" : "Completed"}), 200
+    else:
+        return jsonify({"task" : "Not Completed"}), 200
+    
 
 ##################################### HELPER FUNCTIONS #####################################
 
