@@ -110,7 +110,7 @@ def deleteById(task_id):
 
 def checkForUpdate(task_id):
     isCompleted = 0
-    json_data = getById(task_id)
+    json_data = json.loads(getById(task_id))
     # for data in json_data[0]['sub-tasks']:
     #     subTask = json.load(getById(data['_id']))
     #     if(subTask['status'] == '1'):
