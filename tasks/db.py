@@ -115,7 +115,7 @@ def checkForUpdate(task_id):
     for data in json_data['sub-tasks']:
         subTask = coll.find_one({"_id" : ObjectId(data['_id'])})
         subTask["_id"] = str(json_data["_id"])
-        return jsonify(subTask), 200
+        # return jsonify(subTask), 200
     #     if(subTask['status'] == '1'):
     #         isCompleted = 1
     #     else:
