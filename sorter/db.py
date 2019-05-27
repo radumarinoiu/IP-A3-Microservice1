@@ -1,4 +1,5 @@
 from flask import jsonify
+import json
 
 task_priority_index = {
     "Low": 1,
@@ -17,9 +18,9 @@ def sortTasks(data):
     }
 
     final_periods = {
-        "morning": None,
-        "afternoon": None,
-        "evening": None
+        "morning": [],
+        "afternoon": [],
+        "evening": []
     }
 
     final_priorities = {
@@ -44,9 +45,19 @@ def sortTasks(data):
         if preferences[pref] in final_priorities:
             final_priorities[preferences[pref]].append(pref)
 
-    for priority in final_priorities:
-        for period in final_priorities[priority]:
-            if sorted_filtered_tasks[priority]:
-                final_periods[period] = sorted_filtered_tasks[priority].pop(0)
+    last_list_len = 0
+    while last_list_len != len(sorted_filtered_tasks["High"]):
+        last_list_len = len(sorted_filtered_tasks["High"])
+        for priority in final_priorities:
+            for period in final_priorities[priority]:
+                if sorted_filtered_tasks[priority]:
+                    final_periods[period].append(sorted_filtered_tasks[priority].pop(0))
+                    for prio in sorted_filtered_tasks:
+                        try:
+                            sorted_filtered_tasks[prio].remove(final_periods[period][-1])
+                        except Exception:
+                            pass
+
+    print json.dumps(final_periods, indent = 4)
 
     return jsonify(final_periods), 200
